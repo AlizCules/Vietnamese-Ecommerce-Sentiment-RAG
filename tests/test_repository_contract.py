@@ -54,6 +54,10 @@ class RepositoryContractTests(unittest.TestCase):
         self.assertIn("rating-derived", readme)
         self.assertNotRegex(readme, re.compile(r"C:\\\\Users|PycharmProjects|AlizCuli", re.IGNORECASE))
 
+    def test_packaging_script_name(self):
+        self.assertTrue((ROOT / "scripts" / "package_project.py").exists())
+        self.assertFalse((ROOT / "scripts" / "package_final_submission.py").exists())
+
 
 if __name__ == "__main__":
     unittest.main()

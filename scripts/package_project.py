@@ -1,4 +1,4 @@
-"""Package the final reproducible project submission."""
+"""Package the reproducible project artifacts."""
 
 from __future__ import annotations
 
@@ -43,7 +43,7 @@ def should_exclude(path: Path, project_dir: Path) -> bool:
     relative = path.relative_to(project_dir).as_posix()
     if relative.startswith("data/raw/"):
         return True
-    if path.name in {"ecommerce_sentiment_rag_final_submission.zip"}:
+    if path.name in {"ecommerce_sentiment_rag_package.zip"}:
         return True
     return False
 
@@ -62,7 +62,7 @@ def iter_files(path: Path, project_dir: Path) -> list[Path]:
 
 def main() -> None:
     project_dir = resolve_project_dir()
-    output_zip = project_dir / "ecommerce_sentiment_rag_final_submission.zip"
+    output_zip = project_dir / "ecommerce_sentiment_rag_package.zip"
     manifest_path = project_dir / "artifact_manifest.json"
 
     include_paths = [

@@ -14,7 +14,7 @@ An end-to-end text analytics project for Vietnamese e-commerce reviews. The repo
 
 The main analytical flow is:
 
-`Data collection → data quality → review analytics → sentiment classification → evidence retrieval → evaluation → analytical web demo`
+`Project-provided data → data quality → review analytics → sentiment classification → evidence retrieval → evaluation → analytical web demo`
 
 ## Analytical Objectives
 
