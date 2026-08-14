@@ -75,16 +75,6 @@ def main() -> None:
         "requirements_module6.txt",
         "requirements_webapp.txt",
         "README.md",
-        "README_DEMO.md",
-        "README_RAG_WEBAPP.md",
-        "EXPLAIN_PROJECT_FOR_BEGINNER.md",
-        "README_MODULE1.md",
-        "README_MODULE2.md",
-        "README_MODULE3.md",
-        "README_MODULE4.md",
-        "README_MODULE5.md",
-        "README_MODULE6.md",
-        "UPDATE_NOTES_MODULE1_2.md",
         "docs",
         "data/processed",
         "data/eval",
@@ -104,7 +94,6 @@ def main() -> None:
         "figures/module4",
         "figures/module5",
         "figures/module6",
-        "report",
     ]
 
     missing_optional_paths = []
@@ -128,7 +117,7 @@ def main() -> None:
     ]
     manifest = {
         "created_at_utc": datetime.now(timezone.utc).isoformat(),
-        "project_dir": str(project_dir),
+        "project_dir": ".",
         "missing_optional_paths": missing_optional_paths,
         "files": manifest_entries,
     }
