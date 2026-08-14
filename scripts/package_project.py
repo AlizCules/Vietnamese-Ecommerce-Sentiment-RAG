@@ -1,4 +1,4 @@
-"""Package the final reproducible project submission."""
+"""Package the reproducible project artifacts."""
 
 from __future__ import annotations
 
@@ -43,7 +43,7 @@ def should_exclude(path: Path, project_dir: Path) -> bool:
     relative = path.relative_to(project_dir).as_posix()
     if relative.startswith("data/raw/"):
         return True
-    if path.name in {"ecommerce_sentiment_rag_final_submission.zip"}:
+    if path.name in {"ecommerce_sentiment_rag_package.zip"}:
         return True
     return False
 
@@ -62,7 +62,7 @@ def iter_files(path: Path, project_dir: Path) -> list[Path]:
 
 def main() -> None:
     project_dir = resolve_project_dir()
-    output_zip = project_dir / "ecommerce_sentiment_rag_final_submission.zip"
+    output_zip = project_dir / "ecommerce_sentiment_rag_package.zip"
     manifest_path = project_dir / "artifact_manifest.json"
 
     include_paths = [
@@ -75,16 +75,6 @@ def main() -> None:
         "requirements_module6.txt",
         "requirements_webapp.txt",
         "README.md",
-        "README_DEMO.md",
-        "README_RAG_WEBAPP.md",
-        "EXPLAIN_PROJECT_FOR_BEGINNER.md",
-        "README_MODULE1.md",
-        "README_MODULE2.md",
-        "README_MODULE3.md",
-        "README_MODULE4.md",
-        "README_MODULE5.md",
-        "README_MODULE6.md",
-        "UPDATE_NOTES_MODULE1_2.md",
         "docs",
         "data/processed",
         "data/eval",
@@ -104,7 +94,6 @@ def main() -> None:
         "figures/module4",
         "figures/module5",
         "figures/module6",
-        "report",
     ]
 
     missing_optional_paths = []
@@ -128,7 +117,7 @@ def main() -> None:
     ]
     manifest = {
         "created_at_utc": datetime.now(timezone.utc).isoformat(),
-        "project_dir": str(project_dir),
+        "project_dir": ".",
         "missing_optional_paths": missing_optional_paths,
         "files": manifest_entries,
     }

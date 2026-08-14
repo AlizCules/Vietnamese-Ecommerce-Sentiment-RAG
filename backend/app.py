@@ -162,8 +162,8 @@ def build_query_understanding(
 def load_precision_at_5() -> dict[str, Any]:
     """Read Precision@5 and label it as current or baseline.
 
-    The old submission stores manual Precision@5 in module5; that number is a
-    baseline unless the upgraded experiment exports a new precision summary.
+    The stored manual Precision@5 in module5 is a baseline unless the upgraded
+    experiment exports a new precision summary.
     """
     candidates = [
         (

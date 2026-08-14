@@ -2,7 +2,7 @@
 
 This file is intentionally additive. It does not replace module4_retrieve.py.
 The web demo and upgraded RAG pipeline import this module so the original
-submission can still run unchanged.
+retrieval workflow can still run unchanged.
 """
 
 from __future__ import annotations
