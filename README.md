@@ -16,6 +16,40 @@ The main analytical flow is:
 
 `Project-provided data → data quality → review analytics → sentiment classification → evidence retrieval → evaluation → analytical web demo`
 
+## Key Findings
+
+- The review base is close to balanced between positive (42.95%) and negative (40.18%) feedback, with a smaller neutral group (16.87%).
+- Neutral reviews are the hardest class to classify: the Linear SVM neutral-class F1 is approximately 0.823, consistent with short or ambiguous text that does not state a clear opinion.
+- The selected classifier reaches 0.910 Macro-F1 and 0.933 accuracy, making it suitable for first-pass triage of large feedback volumes; the labels are rating-derived rather than independently human-annotated.
+- The retrieval layer is for answering evidence-backed questions about delivery, packaging and product quality, so an analyst can inspect the underlying review snippets instead of relying only on an aggregate sentiment label.
+
+### Worked example from the Module 4 artifact
+
+The stored output in [`results/module4/rag_outputs.json`](results/module4/rag_outputs.json) records this query and generated response:
+
+**Query:** `Khách hàng phàn nàn gì về giao sai hàng, giao chậm hoặc đóng gói bị móp?`
+
+**Top retrieved evidence snippets:**
+
+- **[1]** “Lần đầu mua hàng tại shop mình đã có trải nghiệm thật sự rất khó chịu. Giao hàng rất nhanh tuy nhiên lần đầu mình mua trắng nhưng shop giao màu đen...” (`sentiment=negative`, `category=Fashion`, `rating=1`)
+- **[2]** “Shop giao sai hàng nhắn tin rất nhiều lần không trả lời , điện thoại 10 c không nghe máy...” (`sentiment=negative`, `category=Electronic`, `rating=3`)
+
+**Generated answer:**
+
+> Dựa trên 8 review được truy hồi, có 5 bằng chứng tiêu cực rõ ràng. Các phàn nàn chính liên quan đến: dịch vụ/shop (20), mẫu mã/size/màu (13), giá (5), giao hàng (3). Bằng chứng chính nằm ở các review [1] [2] [3]. Các phản hồi tiêu cực được ưu tiên trích dẫn khi sentiment là negative và rating thấp hoặc có dấu hiệu khiếu nại trong nội dung.
+
+## Review Analytics
+
+The descriptive analysis is positioned before the NLP and retrieval extensions. The three-class distribution is 42.95% positive, 40.18% negative and 16.87% neutral. The repository also contains aggregate views of review length, rating composition and retrieval-corpus categories.
+
+![Three-class sentiment distribution](figures/module3/sentiment_3class_distribution.png)
+
+![Review text length distribution](figures/module3/sentiment_text_length_distribution.png)
+
+![Retrieval corpus category distribution](figures/module3/rag_category_distribution.png)
+
+The corresponding aggregate table is [`results/module3/overall_sentiment_distribution.csv`](results/module3/overall_sentiment_distribution.csv). Rating-versus-sentiment agreement is not presented as an independent insight because the three-class labels are constructed directly from ratings. Further analytical notes are available in [`docs/review_analytics.md`](docs/review_analytics.md).
+
 ## Analytical Objectives
 
 - Establish a reproducible cleaning and quality-control process for Vietnamese review data.
@@ -47,18 +81,6 @@ The sentiment data layer applies Unicode normalization, HTML and whitespace clea
 
 The train, validation and test partitions are stratified by class. Duplicate removal is important because repeated reviews can inflate evaluation or allow a model to memorize text instead of learning generalizable patterns. The complete pipeline description is in [`docs/data_pipeline.md`](docs/data_pipeline.md).
 
-## Review Analytics
-
-The descriptive analysis is positioned before the NLP and retrieval extensions. The three-class distribution is 42.95% positive, 40.18% negative and 16.87% neutral. The repository also contains aggregate views of review length, rating composition and retrieval-corpus categories.
-
-![Three-class sentiment distribution](figures/module3/sentiment_3class_distribution.png)
-
-![Review text length distribution](figures/module3/sentiment_text_length_distribution.png)
-
-![Retrieval corpus category distribution](figures/module3/rag_category_distribution.png)
-
-The corresponding aggregate table is [`results/module3/overall_sentiment_distribution.csv`](results/module3/overall_sentiment_distribution.csv). Rating-versus-sentiment agreement is not presented as an independent insight because the three-class labels are constructed directly from ratings. Further analytical notes are available in [`docs/review_analytics.md`](docs/review_analytics.md).
-
 ## Sentiment Classification
 
 Candidate models use TF-IDF features with unigram and bigram representations. Hyperparameters are selected using validation Macro-F1; the test set is evaluated only after the configuration has been selected.
@@ -77,9 +99,7 @@ The retrieval component is an evidence-grounded review search and answer-generat
 
 `Query → Vietnamese query expansion → dense FAISS retrieval → optional metadata filtering → evidence selection → template-based answer generation`
 
-The final corpus contains 82,677 documents. Reviews are embedded with `intfloat/multilingual-e5-small` (384 dimensions) and indexed with FAISS `IndexFlatIP`; vectors are normalized so inner product corresponds to cosine similarity. The answer generator is template-based and does not call an external LLM. This makes the output reproducible and keeps evidence visible.
-
-Implementation details are documented in [`docs/retrieval_system.md`](docs/retrieval_system.md).
+The retrieval layer is intended to answer evidence-backed operational questions and keeps the supporting review text visible through a reproducible, template-based response. Embedding, FAISS and evidence-generation implementation details are documented in [`docs/retrieval_system.md`](docs/retrieval_system.md); the final corpus and artifact boundary remain documented there.
 
 ## Retrieval Evaluation
 
@@ -95,7 +115,7 @@ This is a small diagnostic benchmark, not a comprehensive production evaluation.
 
 ## Experimental Hybrid Retrieval Extension
 
-Module 6 adds BM25 lexical retrieval, dense retrieval, Reciprocal Rank Fusion, optional reranking and transparent aspect-aware rules. It is an experimental extension rather than the core recruiter-facing contribution. Its current benchmark is a small proxy/reference experiment and must not be read as full-system accuracy or a state-of-the-art claim. Details are in [`docs/hybrid_retrieval.md`](docs/hybrid_retrieval.md).
+Module 6 is an experimental extension rather than the core recruiter-facing contribution. Its BM25, Reciprocal Rank Fusion, reranking and aspect-analysis details are in [`docs/hybrid_retrieval.md`](docs/hybrid_retrieval.md); its small proxy/reference benchmark must not be read as full-system accuracy or a state-of-the-art claim.
 
 ## Analytical Web Demo
 
